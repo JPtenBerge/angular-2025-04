@@ -1,6 +1,8 @@
 <h1 class="text-3xl font-bold underline">Hello world!</h1>
 
-naam: {{ name }}<br /><br />
+naam: {{ name | uppercase }}<br /><br />
+prijs: {{prijs | euro}}<br>
+nu: {{nu | date: 'd MMMM Y'}}
 
 <button (mouseover)="changeName()">Verander naam</button>
 

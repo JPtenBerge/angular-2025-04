@@ -81,12 +81,23 @@ SSR - Server-Side Rendering
 
 MPA - Multi Page Application
 
+## Pipes
 
+Handig voor formatten van data, bij het databinden meegeven:
 
+```html
+{{name | uppercase}}
+{{nu | date: 'd-m-Y' | empty}}
+```
 
-
-
-
-
-
-
+- output van de ene pipe is de input voor de volgende pipe
+- default pipes
+  - uppercase
+  - lowercase
+  - titlecase
+  - currency
+  - date
+  - obj | json   handig voor debuggen
+  - number
+  - percentage
+  - async  Promise/Observable
