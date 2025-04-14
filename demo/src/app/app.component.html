@@ -1,0 +1,30 @@
+naam: {{ name }}<br /><br />
+
+<button (mouseover)="changeName()">Verander naam</button>
+
+<input [(ngModel)]="name" />
+
+@if (!frameworks) {
+	<p>Geen frameworks vandaag.</p>
+} @else {
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Framework 2</th>
+				<th>Rating</th>
+				<th>Logo</th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (framework of frameworks; track framework.id) {
+				<tr [class.awesome]="framework.rating > 8" [class.bla]="">
+					<td>{{ framework.id }}</td>
+					<td>{{ framework.name }}</td>
+					<td>{{ framework.rating }}</td>
+					<td><img [src]="framework.logoUrl" /></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
