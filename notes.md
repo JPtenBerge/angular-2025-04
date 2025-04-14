@@ -101,3 +101,36 @@ Handig voor formatten van data, bij het databinden meegeven:
   - number
   - percentage
   - async  Promise/Observable
+
+
+## Unittesten
+
+- karma    <== runner rapporteert
+- jasmine  <== framework assertions
+
+```ts
+describe('...', () => {
+	it('..', () => {
+
+	});
+});
+```
+
+Let op: [Karma](https://github.com/karma-runner/karma) is al een tijdje deprecated. [Angular is bezig met het evalueren van nieuwere tools](https://angular.dev/roadmap):
+>We're currently evaluating Web Test Runner, Vitest, and Jest as candidates for a new test runner for Angular projects while preserving Jasmine as assertion library to not break existing tests.
+
+
+## Formulieren
+
+Twee manieren!
+
+- Template-driven (FormsModule)
+  - hier staat alles in je template
+- Model-driven (ReactiveFormsModule)
+  - hier niet.
+
+Reactive forms voordelen:
+- meer scheiding == meer beter
+- unittestbaarheid
+- custom validators zijn "gewoon" functies
+
