@@ -1,3 +1,18 @@
+
+<h3 class="text-2xl font-bold">Autocompleter</h3>
+<app-autocompleter [data]="frameworks" />
+
+
+<h3 class="text-2xl font-bold">Life</h3>
+
+<button (click)="showLife = !showLife" class="btn btn-secondary">Toggle life</button>
+
+@if (showLife) {
+	<app-life message="bla" />
+}
+
+<div class="divider"></div>
+
 Template Reference Variable
 
 <div class="bla hoi ding flof" #yep>heuj!</div>

@@ -4,14 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { EuroPipe } from './pipes/euro.pipe';
 import { createFramework, Framework } from './entities/framework';
+import { LifeComponent } from "./components/life/life.component";
 
 @Component({
 	selector: 'app-root',
-	imports: [RouterOutlet, FormsModule, UpperCasePipe, CurrencyPipe, DatePipe, EuroPipe, JsonPipe],
+	imports: [RouterOutlet, FormsModule, UpperCasePipe, CurrencyPipe, DatePipe, EuroPipe, JsonPipe, LifeComponent],
 	templateUrl: './app.component.html',
 	styleUrl: './app.component.css',
 })
 export class AppComponent {
+	showLife = false;
 	name = 'Wesley';
 	prijs = 12345678.9;
 	nu = new Date('2025-01-18');
