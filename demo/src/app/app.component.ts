@@ -1,20 +1,24 @@
-import { CurrencyPipe, DatePipe, UpperCasePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, JsonPipe, UpperCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { EuroPipe } from './pipes/euro.pipe';
+import { createFramework, Framework } from './entities/framework';
 
 @Component({
 	selector: 'app-root',
-	imports: [RouterOutlet, FormsModule, UpperCasePipe, CurrencyPipe, DatePipe, EuroPipe],
+	imports: [RouterOutlet, FormsModule, UpperCasePipe, CurrencyPipe, DatePipe, EuroPipe, JsonPipe],
 	templateUrl: './app.component.html',
 	styleUrl: './app.component.css',
 })
 export class AppComponent {
 	name = 'Wesley';
-	prijs = 12345678.90;
+	prijs = 12345678.9;
 	nu = new Date('2025-01-18');
-	frameworks = [
+
+	newFramework = createFramework();
+
+	frameworks: Framework[] = [
 		{
 			id: 4,
 			name: 'Svelte',
@@ -38,7 +42,14 @@ export class AppComponent {
 		},
 	];
 
-	changeName() {
-		this.name += ' Ruud';
+	addFramework() {
+		// how to clone an object in JS
+		// spreaden
+		
+		// let shallowClone  = { ...this.newFramework };
+		// let deepClone  = JSON.parse(JSON.stringify(this.newFramework)); // traag. 
+		// let besteClone = structuredClone(this.newFramework);
+
+		this.frameworks.push({ ...this.newFramework });
 	}
 }

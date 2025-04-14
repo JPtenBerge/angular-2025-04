@@ -1,13 +1,63 @@
-<h1 class="text-3xl font-bold underline">Hello world!</h1>
-<button class="btn btn-primary">Hello World!</button>
+Template Reference Variable
 
-naam: {{ name | uppercase }}<br /><br />
-prijs: {{prijs | euro}}<br>
-nu: {{nu | date: 'd MMMM Y'}}
+<div class="bla hoi ding flof" #yep>heuj!</div>
 
-<button (mouseover)="changeName()">Verander naam</button>
+innerText: {{ yep.className }}
 
-<input [(ngModel)]="name" />
+<!-- <button (click)="drawer.open()">Open drawer</button>
+<app-drawer #drawer></app-drawer> -->
+
+<form (submit)="addFramework()" #formpie="ngForm">
+	<ol>
+		<li>
+			<label for="input-name">Naam:</label>
+			<input
+				id="input-name"
+				class="input input-primary"
+				[(ngModel)]="newFramework.name"
+				name="name"
+				required
+				pattern="^[a-zA-Z0-9.]{3,}$"
+				#inputName="ngModel"
+				[class.input-warning]="inputName.touched && inputName.invalid"
+				[class.input-success]="inputName.touched && !inputName.invalid"
+			/>
+			@if (inputName.touched && inputName.invalid) {
+				<span>*</span>
+			}
+			@if (inputName.touched && inputName.errors?.["required"]) {
+				<span>Vul in aub</span>
+			}
+			@if (inputName.touched && inputName.errors?.["pattern"]) {
+				<span>Alleen letters, cijfers en punten graag</span>
+			}
+		</li>
+		<li>
+			<label for="input-rating">Rating:</label>
+			<input
+				type="number"
+				min="1"
+				max="10"
+				id="input-rating"
+				class="input input-primary"
+				[(ngModel)]="newFramework.rating"
+				name="rating"
+			/>
+		</li>
+		<li>
+			<label for="input-logo-url">Logo:</label>
+			<input
+				id="input-logo-url"
+				type="url"
+				class="input input-primary"
+				[(ngModel)]="newFramework.logoUrl"
+				name="logoUrl"
+			/>
+		</li>
+		<li>{{ newFramework | json }}</li>
+		<li><button class="btn btn-primary" [disabled]="formpie.invalid">Submit!</button></li>
+	</ol>
+</form>
 
 @if (!frameworks) {
 	<p>Geen frameworks vandaag.</p>
