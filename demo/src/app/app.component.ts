@@ -4,11 +4,22 @@ import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { EuroPipe } from './pipes/euro.pipe';
 import { createFramework, Framework } from './entities/framework';
-import { LifeComponent } from "./components/life/life.component";
+import { LifeComponent } from './components/life/life.component';
+import { AutocompleterComponent } from './components/autocompleter/autocompleter.component';
 
 @Component({
 	selector: 'app-root',
-	imports: [RouterOutlet, FormsModule, UpperCasePipe, CurrencyPipe, DatePipe, EuroPipe, JsonPipe, LifeComponent],
+	imports: [
+		RouterOutlet,
+		FormsModule,
+		UpperCasePipe,
+		CurrencyPipe,
+		DatePipe,
+		EuroPipe,
+		JsonPipe,
+		LifeComponent,
+		AutocompleterComponent,
+	],
 	templateUrl: './app.component.html',
 	styleUrl: './app.component.css',
 })
@@ -47,11 +58,15 @@ export class AppComponent {
 	addFramework() {
 		// how to clone an object in JS
 		// spreaden
-		
+
 		// let shallowClone  = { ...this.newFramework };
-		// let deepClone  = JSON.parse(JSON.stringify(this.newFramework)); // traag. 
+		// let deepClone  = JSON.parse(JSON.stringify(this.newFramework)); // traag.
 		// let besteClone = structuredClone(this.newFramework);
 
 		this.frameworks.push({ ...this.newFramework });
+	}
+
+	handleFrameworkSelect(framework: Framework) {
+		console.log('hey er is iets geselecteerd!!', framework);
 	}
 }

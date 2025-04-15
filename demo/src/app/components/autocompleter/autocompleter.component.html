@@ -1,1 +1,9 @@
-<p>autocompleter works!</p>
+<input [(ngModel)]="query" (input)="autocomplete()" (keydown.arrowdown)="next()" (keydown.enter)="select()" />
+
+@if (suggestions) {
+	<ul>
+		@for (suggestion of suggestions; let i = $index; track suggestion) {
+			<li [class.bg-slate-300]="activeSuggestionIndex === i">{{ suggestion | json }}</li>
+		}
+	</ul>
+}
