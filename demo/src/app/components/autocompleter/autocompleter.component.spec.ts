@@ -1,4 +1,8 @@
+import { TestBed } from '@angular/core/testing';
 import { AutocompleterComponent } from './autocompleter.component';
+import { FormsModule } from '@angular/forms';
+import { NavigateService } from '../../services/navigate.service';
+import { MockProvider } from 'ng-mocks';
 
 interface Provincie {
 	naam: string;
@@ -8,6 +12,7 @@ interface Provincie {
 describe('Component: Autocompleter', () => {
 	let data: Provincie[];
 	let sut: AutocompleterComponent<Provincie>;
+	let navigateServiceMock: jasmine.SpyObj<NavigateService>;
 
 	beforeEach(() => {
 		data = [
@@ -21,12 +26,28 @@ describe('Component: Autocompleter', () => {
 			{ naam: 'Gelderland', hoofdstad: 'Arnhem' },
 			{ naam: 'Limburg', hoofdstad: 'Maastrig' },
 		];
-		sut = new AutocompleterComponent<Provincie>(); // TestBed
+
+		// navigateServiceMock = jasmine.createSpyObj<NavigateService>('navigateServiceMock', ['next']);
+		// navigateServiceMock.next.and.returnValue(42);
+
+		// navigateServiceMock = new NavigateService();
+		// spyOn(navigateServiceMock, 'next');
+
+		TestBed.configureTestingModule({
+			declarations: [], // niet-standalone components pipes directives
+			imports: [AutocompleterComponent, FormsModule], // modules
+			providers: [MockProvider(NavigateService)], // services/DI globale instellingen als locale
+		});
+		navigateServiceMock = TestBed.inject(NavigateService) as jasmine.SpyObj<NavigateService>;
+		navigateServiceMock.next.and.returnValue(42);
+
+		let fixture = TestBed.createComponent(AutocompleterComponent<Provincie>);
+		fixture.componentRef.setInput('data', data);
+		sut = fixture.componentInstance;
 	});
 
 	it('autocompletes a list of suggestions', () => {
 		// Arrange
-		sut.data = data;
 		sut.query = 's';
 
 		// Act
@@ -43,9 +64,6 @@ describe('Component: Autocompleter', () => {
 	});
 
 	it('shows all data if no query is provided', () => {
-		// Arrange
-		sut.data = data;
-
 		// Act
 		sut.autocomplete();
 
@@ -55,8 +73,9 @@ describe('Component: Autocompleter', () => {
 
 	it('handles different datatypes gracefully', () => {
 		// Arrange
-		let sut = new AutocompleterComponent<{ x?: number; y?: null | string }>();
-		sut.data = [{ x: 41 }, { y: 'hoi' }, { y: null }, { y: 'blaai' }];
+		let fixture = TestBed.createComponent(AutocompleterComponent<{ x?: number; y?: null | string }>);
+		fixture.componentRef.setInput('data', [{ x: 41 }, { y: 'hoi' }, { y: null }, { y: 'blaai' }]);
+		let sut = fixture.componentInstance;
 		sut.query = 'i';
 
 		// Act
@@ -68,7 +87,6 @@ describe('Component: Autocompleter', () => {
 
 	it('adds suggestions uniquely', () => {
 		// Arrange
-		sut.data = data;
 		sut.query = 'e';
 
 		// Act
@@ -88,54 +106,24 @@ describe('Component: Autocompleter', () => {
 		expect(sut.suggestions).toEqual(expected);
 	});
 
-    it('does not navigate to the next suggestion if there are no suggestions', () => {
-        // Arrange
-        sut.data = data;
-        sut.query = 'qwerty';
-        sut.autocomplete();
+	// it('does not navigate to the next suggestion if there are no suggestions', () => {
+	// 	// Arrange
+	// 	sut.query = 'qwerty';
+	// 	sut.autocomplete();
 
-        // Act
-        sut.next();
+	// 	// Act
+	// 	sut.next();
 
-        // Assert
-        expect(sut.activeSuggestionIndex).toBeNull();
-    });
+	// 	// Assert
+	// 	expect(sut.activeSuggestionIndex).toBeNull();
+	// });
 
-	describe('nexting', () => {
-		beforeEach(() => {
-			sut.data = data;
-			sut.query = 's';
-			sut.autocomplete();
-		});
+	it(`uses the ${NavigateService.name} for nexting`, () => {
+		// Act
+		sut.next();
 
-		it('navigates to the first suggestion when no suggestion is active', () => {
-			// Act
-			sut.next();
-
-			// Assert
-			expect(sut.activeSuggestionIndex).toBe(0);
-		});
-
-		it('navigates to the second suggestion when the first suggestion is active', () => {
-			// Arrange
-			sut.next();
-
-			// Act
-			sut.next();
-
-			// Assert
-			expect(sut.activeSuggestionIndex).toBe(1);
-		});
-
-		it('navigates to the first suggestion when the last suggestion is active', () => {
-			// Arrange
-			sut.suggestions?.forEach(s => sut.next());
-
-			// Act
-			sut.next();
-
-			// Assert
-			expect(sut.activeSuggestionIndex).toBe(0);
-		});
+		// Assert
+		expect(navigateServiceMock.next).toHaveBeenCalled(); // spionnetje
+		expect(sut.activeSuggestionIndex).toBe(42);
 	});
 });

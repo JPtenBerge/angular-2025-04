@@ -1,6 +1,7 @@
 import { JsonPipe, NgTemplateOutlet } from '@angular/common';
-import { Component, contentChild, input, output, TemplateRef } from '@angular/core';
+import { Component, contentChild, inject, input, output, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NavigateService } from '../../services/navigate.service';
 
 @Component({
 	selector: 'app-autocompleter',
@@ -11,6 +12,8 @@ export class AutocompleterComponent<T extends {}> {
 	data = input.required<T[]>();
 	query?: string;
 	selectItem = output<T>();
+
+	navigateService = inject(NavigateService);
 
 	itemTemplate =
 		contentChild.required<
@@ -44,16 +47,7 @@ export class AutocompleterComponent<T extends {}> {
 	}
 
 	next() {
-		if (!this.suggestions || this.suggestions.length === 0) {
-			return;
-		}
-
-		if (this.activeSuggestionIndex !== null) {
-			this.activeSuggestionIndex = (this.activeSuggestionIndex + 1) % this.suggestions.length;
-			return;
-		}
-
-		this.activeSuggestionIndex = 0;
+		this.activeSuggestionIndex = this.navigateService.next(this.suggestions, this.activeSuggestionIndex);
 	}
 
 	select() {
