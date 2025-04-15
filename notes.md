@@ -76,7 +76,7 @@ SPA - Single Page Application
 - Angular Vue React Svelte Blazor Solid    Qwik 
 
 SSR - Server-Side Rendering
-- Nuxt Next SvelteKit QwikCity SolidStart ASP.NET Core @angular/ssr
+- Nuxt Next SvelteKit QwikCity SolidStart ASP.NET Core @angular/ssr Analog (Vite)
 - hydration
 
 MPA - Multi Page Application
@@ -134,3 +134,72 @@ Reactive forms voordelen:
 - unittestbaarheid
 - custom validators zijn "gewoon" functies
 
+## Components
+
+- lifecycle
+- herbruikbaar UI-component
+  - TDD
+
+```ts
+// wat Angular doet
+let comp = new LifeComponent(); // constructor
+comp.inputVal = comp.getAttribute('message'); // input binding
+comp.ngOnInit();
+
+
+// veel later
+
+
+
+comp.ngOnDestroy();
+```
+
+## Test-driven development (TDD)
+
+1. Schrijf een test
+2. Draai de test en zie dat hij faalt
+3. Vibe code/implementeer   minimale code
+4. Draai de test en zie dat hij slaagt / alle tests
+5. Refactor
+
+Repeat.
+
+RED-GREEN-REFACTOR
+
+## Angular's migratie
+
+Oud Angular vs new Angular.
+
+**Component input/outputs**
+
+```ts
+// Angular 2+
+export class JouwComponent {
+	@Input() data;
+	@Output() selectItem = new EventEmitter<T>();
+}
+
+// Angular 17+
+export class JouwComponent {
+	data = input(); // input signal
+	selectItem = output<T>(); // output signal
+}
+```
+
+**Dependency injection**
+
+Oud Angular vult `providers`-array, nieuw Angular `providedIn: 'root'`
+
+```ts
+// Angular 2+
+{
+	providers: [
+		// { provide: NavigateService, useClass: NavigateService },
+		NavigateService,
+	],
+};
+
+// Angular 7+
+@Injectable({ providedIn: 'root' })
+export class NavigateService {
+```
