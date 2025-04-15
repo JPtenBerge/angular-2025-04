@@ -1,17 +1,22 @@
 <h3 class="text-2xl font-bold">Autocompleter</h3>
-<app-autocompleter [data]="frameworks" (selectItem)="handleFrameworkSelect($event)">
-	<ng-template
-		#frameworkTemplate
-		let-currentIndex="currentIndex"
-		let-activeIndex="activeSuggestionIndex"
-		let-framework="suggestion"
-	>
-		<!-- content projection / transclusion -->
-		<li [class.bg-slate-300]="currentIndex === activeIndex">
-			{{ framework.name }} krijgt een {{ framework.rating }}
-		</li>
-	</ng-template>
-</app-autocompleter>
+@if (frameworks) {
+	<app-autocompleter [data]="frameworks" (selectItem)="handleFrameworkSelect($event)">
+		<ng-template
+			#frameworkTemplate
+			let-currentIndex="currentIndex"
+			let-activeIndex="activeSuggestionIndex"
+			let-framework="suggestion"
+		>
+			<!-- content projection / transclusion -->
+			<li [class.bg-slate-300]="currentIndex === activeIndex">
+				{{ framework.name }} krijgt een {{ framework.rating }}
+			</li>
+		</ng-template>
+	</app-autocompleter>
+}
+@else {
+	<app-loader />
+}
 
 <h3 class="text-2xl font-bold">Life</h3>
 
