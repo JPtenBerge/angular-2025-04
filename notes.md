@@ -119,6 +119,7 @@ describe('...', () => {
 Let op: [Karma](https://github.com/karma-runner/karma) is al een tijdje deprecated. [Angular is bezig met het evalueren van nieuwere tools](https://angular.dev/roadmap):
 >We're currently evaluating Web Test Runner, Vitest, and Jest as candidates for a new test runner for Angular projects while preserving Jasmine as assertion library to not break existing tests.
 
+Volgens de [State of JS](https://2024.stateofjs.com/en-US/libraries/testing/) doet Vitest het behoorlijk goed. Goede kans dat Angular daar naartoe gaat bewegen. Jest is momenteel de populairste optie, goede kans dat die ook ondersteund wordt. [Vitest met Angular inzetten](https://timdeschryver.dev/blog/angular-testing-library-with-vitest). Jest heeft momenteel officieel experimental support, Vitest niet.
 
 ## Formulieren
 
@@ -166,6 +167,40 @@ Repeat.
 
 RED-GREEN-REFACTOR
 
+npm i json-server@0.17.4
+npx json-server .\data.json --delay 3000
+
+## Backendcommunicatie
+
+- `fetch()` is prima:
+  ```ts
+  fetch('http://localhost:3000/frameworks').then(x => x.json()).then(frameworks => { /* ... */ });
+  ```
+  Maar:
+  - 500/409 statuscode is geen exception, triggert je `.catch()` niet
+    ```ts
+    fetch('...').then( x=> x.json()).catch(err => {})
+    ```
+  - JSON-parsing bij 200 OK, maar niet bij 201/204/401/500-statuscodes
+  - features als interceptors - bij ieder request bijv. een authenticatie-header meesturen
+- [Axios](https://www.npmjs.com/package/axios) is een veelgeziene package in dit spectrum
+- Angular's `HttpClient` doet automatisch JSON parsen, biedt ondersteuning voor interceptors, maar werkt nog met Observables.
+- [TanStack Query](https://tanstack.com/query/v5/docs/framework/angular/overview) ben ik wel van gecharmeerd de laatste tijd. Hier en daar met testen een beetje tricky om aan de praat te krijgen, maar wel erg fijn dat hij zelf states bijhoudt van `isSuccess()` `isPending()`, etc. Werkt ook met Angular's hippe nieuwe signals. Kan ook queries retryen en "stale" data invalidaten/refreshen.
+
+## Dependency injection / services
+
+- een instantie van een object krijgen zonder dat je 'm zelf aanmaakt
+  - geen `new BlaService();`
+    - lastiger te testen. lastiger te mocken.
+- een vorm van inversion of control
+- dingen injecteren:
+  - constructor // 2+
+  - `inject()` // 14+
+- iets beschikbaar maken:
+  - `@Injectable()`
+  - `providers` - config van je app  singleton
+  - `viewProviders` - singleton binnen component en diens children
+
 ## Angular's migratie
 
 Oud Angular vs new Angular.
@@ -202,4 +237,14 @@ Oud Angular vult `providers`-array, nieuw Angular `providedIn: 'root'`
 // Angular 7+
 @Injectable({ providedIn: 'root' })
 export class NavigateService {
+```
+
+## Overig
+
+**How to clone an object**
+
+```ts
+let shallowClone  = { ...this.newFramework };
+let deepClone  = JSON.parse(JSON.stringify(this.newFramework)); // traag.
+let besteClone = structuredClone(this.newFramework);
 ```
