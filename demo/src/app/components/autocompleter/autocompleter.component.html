@@ -1,11 +1,20 @@
-<input [(ngModel)]="query" (input)="autocomplete()" (keydown.arrowdown)="next()" (keydown.enter)="select()" />
+<input
+	[(ngModel)]="query"
+	(input)="autocomplete()"
+	(keydown.arrowdown)="next()"
+	(keydown.enter)="select()"
+	class="input input-secondary"
+/>
 
 @if (suggestions) {
 	<ul>
-        @for (suggestion of suggestions; let i = $index; track suggestion) {
-            <ng-container
-                *ngTemplateOutlet="itemTemplate(); context: { suggestion, currentIndex: i, activeSuggestionIndex }"
-            ></ng-container>
-        }
+		@for (suggestion of suggestions; let i = $index; track suggestion) {
+			<ng-container
+				*ngTemplateOutlet="
+					itemTemplate();
+					context: { suggestion, currentIndex: i, activeSuggestionIndex }
+				"
+			></ng-container>
+		}
 	</ul>
 }

@@ -33,8 +33,8 @@ innerText: {{ yep.className }}
 <app-drawer #drawer></app-drawer> -->
 
 <form (submit)="addFramework()" #formpie="ngForm">
-	<ol>
-		<li>
+	<ol class="grid grid-cols-[max-content,max-content,1fr] gap-2">
+		<li class="grid col-span-3 grid-cols-subgrid items-center">
 			<label for="input-name">Naam:</label>
 			<input
 				id="input-name"
@@ -47,17 +47,20 @@ innerText: {{ yep.className }}
 				[class.input-warning]="inputName.touched && inputName.invalid"
 				[class.input-success]="inputName.touched && !inputName.invalid"
 			/>
-			@if (inputName.touched && inputName.invalid) {
-				<span>*</span>
-			}
-			@if (inputName.touched && inputName.errors?.["required"]) {
-				<span>Vul in aub</span>
-			}
-			@if (inputName.touched && inputName.errors?.["pattern"]) {
-				<span>Alleen letters, cijfers en punten graag</span>
-			}
+
+			<div>
+				@if (inputName.touched && inputName.invalid) {
+					<span>*</span>
+				}
+				@if (inputName.touched && inputName.errors?.["required"]) {
+					<span>Vul in aub</span>
+				}
+				@if (inputName.touched && inputName.errors?.["pattern"]) {
+					<span>Alleen letters, cijfers en punten graag</span>
+				}
+			</div>
 		</li>
-		<li>
+		<li class="grid col-span-3 grid-cols-subgrid items-center">
 			<label for="input-rating">Rating:</label>
 			<input
 				type="number"
@@ -69,7 +72,7 @@ innerText: {{ yep.className }}
 				name="rating"
 			/>
 		</li>
-		<li>
+		<li class="grid col-span-2 grid-cols-subgrid items-center">
 			<label for="input-logo-url">Logo:</label>
 			<input
 				id="input-logo-url"
@@ -79,8 +82,10 @@ innerText: {{ yep.className }}
 				name="logoUrl"
 			/>
 		</li>
-		<li>{{ newFramework | json }}</li>
-		<li><button class="btn btn-primary" [disabled]="formpie.invalid">Submit!</button></li>
+		<li class="grid col-span-2">{{ newFramework | json }}</li>
+		<li class="grid col-span-2">
+			<button class="btn btn-primary" [disabled]="formpie.invalid">Submit!</button>
+		</li>
 	</ol>
 </form>
 
