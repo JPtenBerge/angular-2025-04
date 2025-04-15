@@ -1,10 +1,10 @@
-import { JsonPipe } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { JsonPipe, NgTemplateOutlet } from '@angular/common';
+import { Component, contentChild, input, output, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'app-autocompleter',
-	imports: [FormsModule, JsonPipe],
+	imports: [FormsModule, JsonPipe, NgTemplateOutlet],
 	templateUrl: './autocompleter.component.html',
 })
 export class AutocompleterComponent<T extends {}> {
@@ -12,11 +12,16 @@ export class AutocompleterComponent<T extends {}> {
 	query?: string;
 	selectItem = output<T>();
 
+	itemTemplate =
+		contentChild.required<
+			TemplateRef<{ suggestion: T; currentIndex: number; activeSuggestionIndex: number | null }>
+		>('frameworkTemplate');
+
 	suggestions?: T[];
 	activeSuggestionIndex: number | null = null;
 
 	autocomplete() {
-        console.log('autocompleting!', this.query);
+		console.log('autocompleting!', this.query);
 		if (!this.query) {
 			this.suggestions = this.data();
 			return;
@@ -39,9 +44,9 @@ export class AutocompleterComponent<T extends {}> {
 	}
 
 	next() {
-        if (!this.suggestions || this.suggestions.length === 0) {
-            return;
-        }
+		if (!this.suggestions || this.suggestions.length === 0) {
+			return;
+		}
 
 		if (this.activeSuggestionIndex !== null) {
 			this.activeSuggestionIndex = (this.activeSuggestionIndex + 1) % this.suggestions.length;
