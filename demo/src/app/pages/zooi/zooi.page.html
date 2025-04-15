@@ -1,0 +1,41 @@
+<h2 class="text-3xl">Zooi {{id()}}</h2>
+
+<div class="flex gap-20">
+	<div>
+		<h3 class="text-2xl font-bold">Autocompleter</h3>
+		@if (frameworks) {
+			<app-autocompleter [data]="frameworks" (selectItem)="handleFrameworkSelect($event)">
+				<ng-template
+					#frameworkTemplate
+					let-currentIndex="currentIndex"
+					let-activeIndex="activeSuggestionIndex"
+					let-framework="suggestion"
+				>
+					<!-- content projection / transclusion -->
+					<li [class.bg-slate-300]="currentIndex === activeIndex">
+						{{ framework.name }} krijgt een {{ framework.rating }}
+					</li>
+				</ng-template>
+			</app-autocompleter>
+		} @else {
+			<app-loader />
+		}
+
+		<h3 class="text-2xl font-bold">Life</h3>
+
+		<button (click)="showLife = !showLife" class="btn btn-secondary">Toggle life</button>
+
+		@if (showLife) {
+			<app-life message="bla" />
+		}
+
+		<div class="divider"></div>
+
+		Template Reference Variable
+
+		<div class="bla hoi ding flof" #yep>heuj!</div>
+
+		innerText: {{ yep.className }}
+	</div>
+
+</div>

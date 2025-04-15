@@ -1,0 +1,88 @@
+<h2 class="text-3xl">Frameworks</h2>
+
+<div class="flex gap-20">
+	<div>
+		<!-- <button (click)="drawer.open()">Open drawer</button>
+<app-drawer #drawer></app-drawer> -->
+		<form (submit)="addFramework()" #formpie="ngForm">
+			<ol class="grid grid-cols-[max-content,max-content,1fr] gap-2">
+				<li class="grid col-span-3 grid-cols-subgrid items-center">
+					<label for="input-name">Naam:</label>
+					<input
+						id="input-name"
+						class="input input-primary"
+						[(ngModel)]="newFramework.name"
+						name="name"
+						required
+						pattern="^[a-zA-Z0-9.]{3,}$"
+						#inputName="ngModel"
+						[class.input-warning]="inputName.touched && inputName.invalid"
+						[class.input-success]="inputName.touched && !inputName.invalid"
+					/>
+
+					<div>
+						@if (inputName.touched && inputName.invalid) {
+						<span>*</span>
+						} @if (inputName.touched && inputName.errors?.["required"]) {
+						<span>Vul in aub</span>
+						} @if (inputName.touched && inputName.errors?.["pattern"]) {
+						<span>Alleen letters, cijfers en punten graag</span>
+						}
+					</div>
+				</li>
+				<li class="grid col-span-3 grid-cols-subgrid items-center">
+					<label for="input-rating">Rating:</label>
+					<input
+						type="number"
+						min="1"
+						max="10"
+						id="input-rating"
+						class="input input-primary"
+						[(ngModel)]="newFramework.rating"
+						name="rating"
+					/>
+				</li>
+				<li class="grid col-span-2 grid-cols-subgrid items-center">
+					<label for="input-logo-url">Logo:</label>
+					<input
+						id="input-logo-url"
+						type="url"
+						class="input input-primary"
+						[(ngModel)]="newFramework.logoUrl"
+						name="logoUrl"
+					/>
+				</li>
+				<li class="grid col-span-2">{{ newFramework | json }}</li>
+				<li class="grid col-span-2">
+					<button class="btn btn-primary" [disabled]="formpie.invalid">Submit!</button>
+				</li>
+			</ol>
+		</form>
+	</div>
+	<div>
+		@if (!frameworks) {
+		<p>Geen frameworks vandaag.</p>
+		} @else {
+		<table>
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Framework 2</th>
+					<th>Rating</th>
+					<th>Logo</th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (framework of frameworks; track framework.id) {
+				<tr [class.bg-red-200]="framework.rating > 8" [class.bla]="">
+					<td>{{ framework.id }}</td>
+					<td>{{ framework.name }}</td>
+					<td>{{ framework.rating }}</td>
+					<td><img [src]="framework.logoUrl" class="max-w-28" /></td>
+				</tr>
+				}
+			</tbody>
+		</table>
+		}
+	</div>
+</div>
