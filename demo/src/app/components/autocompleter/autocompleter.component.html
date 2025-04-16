@@ -1,6 +1,5 @@
 <input
-	[(ngModel)]="query"
-	(input)="autocomplete()"
+	[formControl]="query"
 	(keydown.arrowdown)="next()"
 	(keydown.enter)="select()"
 	class="input input-secondary"

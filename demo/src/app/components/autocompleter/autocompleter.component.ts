@@ -1,16 +1,17 @@
 import { JsonPipe, NgTemplateOutlet } from '@angular/common';
 import { Component, contentChild, inject, input, output, TemplateRef } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigateService } from '../../services/navigate.service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
 	selector: 'app-autocompleter',
-	imports: [FormsModule, JsonPipe, NgTemplateOutlet],
+	imports: [ReactiveFormsModule, JsonPipe, NgTemplateOutlet],
 	templateUrl: './autocompleter.component.html',
 })
 export class AutocompleterComponent<T extends {}> {
 	data = input.required<T[]>();
-	query?: string;
+	query = new FormControl<string>('');
 	selectItem = output<T>();
 
 	navigateService = inject(NavigateService);
@@ -23,9 +24,20 @@ export class AutocompleterComponent<T extends {}> {
 	suggestions?: T[];
 	activeSuggestionIndex: number | null = null;
 
+	ngOnInit() {
+		this.query.valueChanges
+			.pipe(
+				debounceTime(300),
+				distinctUntilChanged()
+			)
+			// .pipe(debounceTime(300))
+			// .pipe(distinctUntilChanged())
+			.subscribe(value => this.autocomplete());
+	}
+
 	autocomplete() {
-		console.log('autocompleting!', this.query);
-		if (!this.query) {
+		console.log('autocompleting!', this.query.value);
+		if (!this.query.value) {
 			this.suggestions = this.data();
 			return;
 		}
@@ -38,7 +50,7 @@ export class AutocompleterComponent<T extends {}> {
 					continue;
 				}
 
-				if (item[prop].includes(this.query)) {
+				if (item[prop].includes(this.query.value)) {
 					this.suggestions.push(item);
 					break;
 				}

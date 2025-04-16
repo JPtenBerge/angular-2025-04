@@ -12,8 +12,8 @@
 						id="input-name"
 						class="input input-primary"
 						formControlName="name"
-						[class.input-warning]="f.name.touched && f.name.invalid"
-						[class.input-success]="f.name.touched && !f.name.invalid"
+						[class.input-warning]="f.name.touched && !f.name.valid"
+						[class.input-success]="f.name.touched && f.name.valid"
 					/>
 
 					<div>
@@ -23,6 +23,8 @@
 						<span>Vul in aub</span>
 						} @if (f.name.touched && f.name.errors?.["pattern"]) {
 						<span>Alleen letters, cijfers en punten graag</span>
+						}@if (f.name.touched && f.name.errors?.["bigger"]) {
+						<span>{{ f.name.errors?.["bigger"] }}</span>
 						}
 					</div>
 				</li>

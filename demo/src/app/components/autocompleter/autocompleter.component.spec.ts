@@ -27,6 +27,7 @@ describe('Component: Autocompleter', () => {
 			{ naam: 'Limburg', hoofdstad: 'Maastrig' },
 		];
 
+		// without ng-mocks:
 		// navigateServiceMock = jasmine.createSpyObj<NavigateService>('navigateServiceMock', ['next']);
 		// navigateServiceMock.next.and.returnValue(42);
 
