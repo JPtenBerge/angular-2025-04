@@ -1,0 +1,71 @@
+<h3>New event</h3>
+<form class="mb-3" [formGroup]="form" (ngSubmit)="submit()">
+	<div class="row mb-3">
+		<label for="nameInput" class="form-label col-sm-2">Name</label>
+		<div class="col-sm-10">
+			<input id="nameInput" formControlName="name" type="text" class="form-control" />
+			<div *ngIf="form.get('name')!.touched">
+				<div *ngIf="form.get('name')!.hasError('required')" class="invalid-feedback">
+					Please fill in the event name.
+				</div>
+				@if (form.get('name')!.hasError('minlength')) {
+					<div class="invalid-feedback">
+						Add
+						{{
+						form.get("name")!.getError("minlength").requiredLength -
+						form.get("name")!.getError("minlength").actualLength
+						}}
+						more character(s).
+					</div>
+				}
+				@if (form.get('name')!.hasError('uniqueName')) {
+					<div class="invalid-feedback">
+						Event with name "{{form.get("name")!.getError("uniqueName").name}}" already exists.
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label for="startInput" class="form-label col-sm-2">Start</label>
+		<div class="col-sm-10">
+			<input id="startInput" formControlName="start" type="datetime-local" class="form-control" />
+			@if (form.get('start')!.touched) {
+				<div>
+					@if (form.get('start')!.hasError('required')) {
+						<div class="invalid-feedback">
+							Required
+						</div>
+					}
+				</div>
+			}
+		</div>
+	</div>
+	<div class="row mb-3">
+		<label for="endInput" class="form-label col-sm-2">End</label>
+		<div class="col-sm-10">
+			<input id="endInput" formControlName="end" type="datetime-local" class="form-control" />
+			@if (form.get('end')!.touched) {
+				<div>
+					<div *ngIf="form.get('end')!.hasError('required')" class="invalid-feedback">
+						Required
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+	@if (form.hasError('startBeforeEnd')) {
+		<div class="offset-sm-2 invalid-feedback">
+			Start {{ form.getError("startBeforeEnd").start | date : "short" }} comes
+			after end
+			{{ form.getError("startBeforeEnd").end | date : "short" }}
+		</div>
+	}
+
+	<button [disabled]="!form.valid" type="submit" class="offset-sm-2 btn btn-primary">
+		@if (form.pending) {
+			<span class="spinner-border spinner-border-sm"></span>
+		}
+		Add
+	</button>
+</form>

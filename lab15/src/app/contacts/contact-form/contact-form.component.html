@@ -1,0 +1,70 @@
+<form #addContactForm="ngForm" (ngSubmit)="addContact(addContactForm)">
+  <div class="row mb-3">
+    <label for="nameInput" class="form-label col-md-3">First name</label>
+    <div class="col">
+      <input id="nameInput" required minlength="2" name="firstName" [(ngModel)]="newContact.firstName" type="text"
+        class="form-control" #firstNameModel="ngModel" />
+      @if (firstNameModel.touched) {
+        <div>
+          @if (firstNameModel.hasError('required')) {
+            <div class="invalid-feedback">
+              Please fill in a first name.
+            </div>
+          }
+          @if (firstNameModel.hasError('minlength')) {
+            <div class="invalid-feedback">
+              Minimal length is 2.
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="surnameInput" class="form-label col-md-3">Surname</label>
+    <div class="col">
+      <input id="surnameInput" required minlength="2" name="surname" [(ngModel)]="newContact.surname" type="text"
+        class="form-control col" #surnameModel="ngModel" />
+      @if (surnameModel.touched) {
+        <div>
+          @if (surnameModel.hasError('required')) {
+            <div class="invalid-feedback">
+              Please fill in a surname.
+            </div>
+          }
+          @if (surnameModel.hasError('minlength')) {
+            <div class="invalid-feedback">
+              Minimal length is 2.
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  <div class="row mb-3">
+    <label for="emailInput" class="form-label col-md-3">E-mail address</label>
+    <div class="col">
+      <input id="emailInput" required pattern=".+@.+\..+" name="email" [(ngModel)]="newContact.email" type="text"
+        class="form-control col" #emailModel="ngModel" />
+      @if (emailModel.touched) {
+        <div>
+          @if (emailModel.hasError('required')) {
+            <div class="invalid-feedback">
+              Please fill in an email.
+            </div>
+          }
+          @if (emailModel.hasError('pattern')) {
+            <div class="invalid-feedback">
+              Please fill in a valid email address.
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+  <div class="mb-3">
+    <button type="submit" [disabled]="!addContactForm.valid" class="btn btn-primary offset-md-3">
+      Add
+    </button>
+  </div>
+</form>

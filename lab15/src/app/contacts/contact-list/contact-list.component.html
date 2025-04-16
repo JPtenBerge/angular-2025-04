@@ -1,0 +1,64 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="2">E-mail address</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (contact of contacts; track contact.id) {
+      <tr ngForm #editForm="ngForm" [dpSelectable]="contact" (selectionChange)="updateSelection($event)">
+        <td class="row align-items-center" [style.backgroundColor]="contact.color">
+          <div class="col-auto">
+            <input (input)="setColor($event, contact)" class="form-control form-control-color" type="color"
+              value="#ffffff" />
+          </div>
+          <div class="col">
+            @if (isInEditMode(contact)) {
+              <div class="row">
+                <div class="col-6">
+                  <input class="form-control col-6" name="firstName" required minlength="2" type="text"
+                    [(ngModel)]="contact.firstName" />
+                </div>
+                <div class="col-6">
+                  <input class="form-control col-6" name="surname" required minlength="2" type="text"
+                    [(ngModel)]="contact.surname" />
+                </div>
+              </div>
+            } @else {
+              <div class="row">
+                <div class="col">
+                  {{contact | contactName}}
+                </div>
+              </div>
+            }
+          </div>
+        </td>
+        <td [style.backgroundColor]="contact.color">
+          @if (isInEditMode(contact)) {
+            <input class="form-control" name="email" required pattern=".+@.+\..+" [(ngModel)]="contact.email" />
+          } @else {
+            {{contact.email}}
+          }
+        </td>
+        <td [style.backgroundColor]="contact.color">
+          <div class="d-flex justify-content-end">
+            @if (isInEditMode(contact)) {
+              <button (click)="setEditMode(contact, editForm)" class="btn btn-primary me-2 saveButton">
+                Save
+              </button>
+            }
+            @if (!isInEditMode(contact)) {
+              <button (click)="setEditMode(contact, editForm)" class="btn btn-secondary me-2 editButton">
+                Edit
+              </button>
+            }
+            <button (click)="deleteContact(contact)" class="btn btn-danger deleteButton">
+              Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

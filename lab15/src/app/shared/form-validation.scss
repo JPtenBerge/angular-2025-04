@@ -1,0 +1,26 @@
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+
+.form-control:not(.form-control-color) {
+  padding-right: $input-height-inner;
+  background-repeat: no-repeat;
+  background-position: right $input-height-inner-quarter center;
+  background-size: $input-height-inner-half $input-height-inner-half;
+}
+
+.form-control.ng-valid.ng-touched {
+  background-image: escape-svg($form-feedback-icon-valid);
+  border-color: $form-feedback-valid-color;
+  box-shadow: 0 0 $input-btn-focus-blur $input-focus-width
+    rgba($form-feedback-valid-color, $input-btn-focus-color-opacity);
+}
+.form-control.ng-invalid.ng-touched {
+  background-image: escape-svg($form-feedback-icon-invalid);
+  border-color: $form-feedback-invalid-color;
+  box-shadow: 0 0 $input-btn-focus-blur $input-focus-width
+    rgba($form-feedback-invalid-color, $input-btn-focus-color-opacity);
+}
+
+.invalid-feedback {
+  display: block;
+}

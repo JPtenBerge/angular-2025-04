@@ -1,0 +1,12 @@
+@if (plannedEvent) {
+  <div>
+    <input [(ngModel)]="plannedEvent.name" #eventNameModel="ngModel" required type="text" class="form-control mb-3"
+      placeholder="Birthday party" aria-label="Event name" />
+
+    <button (click)="update()" [disabled]="eventNameModel.invalid" id="button-addon2" class="btn btn-primary">
+      Update
+    </button>
+  </div>
+} @else {
+  Loading
+}
