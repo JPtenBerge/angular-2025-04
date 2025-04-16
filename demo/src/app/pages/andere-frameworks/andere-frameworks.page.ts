@@ -8,9 +8,16 @@ const myValidator = (c: AbstractControl) => {
 	return null;
 };
 
-const myBiggerValidator = (c: AbstractControl) => {
-	// c.get('name')
-	return null;
+const myBiggerValidator = (form: AbstractControl) => {
+	let nameControl = form.get('name');
+	if(!nameControl) {
+		return { bigger: 'No name control found' };
+	}
+	
+	// for generic form messages:
+	return nameControl.value && nameControl.value.length < 100 ? { bigger: 'Name too small' } : null;
+	
+	// alternatively: nameControl.setErrors(['oh noes!']); to be able to display messages to a specific form control
 };
 
 @Component({
@@ -26,7 +33,9 @@ export class AndereFrameworksPage {
 		name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9.-]{3,}$/)]],
 		rating: [0],
 		logoUrl: [''],
-	})
+	}, {
+		validators: [myBiggerValidator]
+	});
 
 	addFrameworkForm = new FormGroup(
 		{
