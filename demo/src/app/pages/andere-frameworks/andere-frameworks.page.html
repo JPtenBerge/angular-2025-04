@@ -1,31 +1,27 @@
-<h2 class="text-3xl">Frameworks</h2>
+<h2 class="text-3xl">Andere frameworks (ReactiveFormsModule)</h2>
 
 <div class="flex gap-20">
 	<div>
 		<!-- <button (click)="drawer.open()">Open drawer</button>
 <app-drawer #drawer></app-drawer> -->
-		<form (submit)="addFramework()" #formpie="ngForm">
+		<form (submit)="addFramework()" [formGroup]="addFrameworkForm2">
 			<ol class="grid grid-cols-[max-content,max-content,1fr] gap-2">
 				<li class="grid col-span-3 grid-cols-subgrid items-center">
 					<label for="input-name">Naam:</label>
 					<input
 						id="input-name"
 						class="input input-primary"
-						[(ngModel)]="newFramework.name"
-						name="name"
-						required
-						pattern="^[a-zA-Z0-9.]{3,}$"
-						#inputName="ngModel"
-						[class.input-warning]="inputName.touched && inputName.invalid"
-						[class.input-success]="inputName.touched && !inputName.invalid"
+						formControlName="name"
+						[class.input-warning]="f.name.touched && f.name.invalid"
+						[class.input-success]="f.name.touched && !f.name.invalid"
 					/>
 
 					<div>
-						@if (inputName.touched && inputName.invalid) {
+						@if (f.name.touched && f.name.invalid) {
 						<span>*</span>
-						} @if (inputName.touched && inputName.errors?.["required"]) {
+						} @if (f.name.touched && f.name.errors?.["required"]) {
 						<span>Vul in aub</span>
-						} @if (inputName.touched && inputName.errors?.["pattern"]) {
+						} @if (f.name.touched && f.name.errors?.["pattern"]) {
 						<span>Alleen letters, cijfers en punten graag</span>
 						}
 					</div>
@@ -34,12 +30,9 @@
 					<label for="input-rating">Rating:</label>
 					<input
 						type="number"
-						min="1"
-						max="10"
 						id="input-rating"
+						formControlName="rating"
 						class="input input-primary"
-						[(ngModel)]="newFramework.rating"
-						name="rating"
 					/>
 				</li>
 				<li class="grid col-span-2 grid-cols-subgrid items-center">
@@ -47,14 +40,13 @@
 					<input
 						id="input-logo-url"
 						type="url"
+						formControlName="logoUrl"
 						class="input input-primary"
-						[(ngModel)]="newFramework.logoUrl"
-						name="logoUrl"
 					/>
 				</li>
-				<li class="grid col-span-2">{{ newFramework | json }}</li>
+				<li class="grid col-span-2">{{ addFrameworkForm2.value | json }}</li>
 				<li class="grid col-span-2">
-					<button class="btn btn-primary" [disabled]="!formpie.valid">Submit!</button>
+					<button class="btn btn-primary" [disabled]="!addFrameworkForm2.valid">Submit!</button>
 				</li>
 			</ol>
 		</form>
