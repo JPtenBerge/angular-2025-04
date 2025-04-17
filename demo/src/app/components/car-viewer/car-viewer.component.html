@@ -1,0 +1,8 @@
+<ul>
+	@for (car of cars(); track car) {
+		<!-- <li>{{ car.make }} {{ car.model }}</li> -->
+		<li>{{ getCarView(car) }}</li>
+	}
+</ul>
+
+<button (click)="addCar()" class="btn btn-outline-error">Auto toevoegen</button>

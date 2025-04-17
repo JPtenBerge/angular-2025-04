@@ -1,0 +1,18 @@
+<p>internals works!</p>
+
+Name: {{name}}<br />
+Name config: {{config.name}}
+
+<button (click)="changeName()" class="btn btn-secondary">Verander naam</button>
+
+<button (click)="addCar()">Auto toevoegen</button>
+
+<div class="flex gap-4">
+	<ul>
+		@for(car of cars; track car) {
+		<li>{{car.make}} {{car.model}}</li>
+		}
+	</ul>
+
+	<app-car-viewer [cars]="cars" />
+</div>
