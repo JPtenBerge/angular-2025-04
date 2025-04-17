@@ -201,6 +201,174 @@ npx json-server .\data.json --delay 3000
   - `providers` - config van je app  singleton
   - `viewProviders` - singleton binnen component en diens children
 
+## Routing
+
+- SPA is meestal pagina's (WhatsApp Web bijv.)
+- geen paginarefreshes meer, enkel content vervangen
+- veel minder FOUC  Flash Of Unstyled Content
+
+SPA in index.html:
+
+- optie 1:
+  ```html
+  <div id="page1">...</div>
+  <div id="page2">...</div>
+  <div id="page3">...</div>
+  ...
+  <div id="page4" active>...</div>
+  <div id="page5">...</div>
+  ```
+
+- optie 2: alle paginatemplates client-side zijn, maar dan in-memory
+- optie 3: lazy loading - iedere paginatemplate van server ophaalt
+- fancy optie 4 (komt meer bij PWAs langs): PRPL
+  - Push critical resources  <== alles wat voor de eerste paginarender nodig is.
+  - Render initial route
+  - Pre-cache additional routes  <== inladen
+  - Lazy loading the rest
+
+Stappen in Angular:
+
+1. route config
+2. `<router-outlet>` voor de paginacontent
+3. pagina's maken
+
+Angular Router:
+- basaal pagina's
+- parameters mee wil geven
+- child routes
+- route guards  - ingelogd
+- route resolvers
+- lazy loading
+
+## Observables
+
+Reactivity - Observables. Wordt in Angular best veel ingezet:
+- `HttpClient`  `.subscribe()`
+- ReactiveForms
+  - `this.form.valueChanges.subscribe()`
+- `@Output()`  `EventEmitter` <== Observable
+- Routing
+  - `this.route.params.subscribe()`
+
+`HttpClient` geeft dus een Observable terug. Moet je die `unsubscriben()`?
+
+- na een request, als de response binnen is, wordt de observable `gecomplete()`
+- de meeste developers doen het niet.
+- vaak abstraheert het DAL weg hoe er met server wordt gecommuniceerd:
+  ```ts
+  export class HomeComponent {
+    private productDal = inject(ProductDal);
+    ngOnInit() {
+      this.productDal.getAll().subscribe( ...)
+    }
+  }
+  ```
+  Als je niet zeker weet of het een HTTP-observable is, is unsubscriben wel het netst.
+
+use cases observables:
+- WebSocket    (HTTP promises)
+- chat
+- authenticationstate
+- master-details op zelfde scherm
+
+5 fasen "reactive denken"
+- Observable subscriben
+- operators
+- Subjects
+- ingewikkelde operators  `switchMap()` `mergeMap()` `iif()`
+- principes - nooit `.subscribe()` in je TypeScript-code
+  ```html
+  @for(frameworks of frameworkObservable | async) { ... }
+  ```
+
+**Subjects**
+
+- `Subject<T>`: `.subscribe()` krijgt enkel wat er vanaf dan ge`next()` wordt
+- `BehaviorSubject<T>`: `.subscribe()` krijgt de laatste waarde en wat er vanaf dan ge`next()` wordt
+- `ReplaySubject<T>`: `.subscribe()` krijgt een geschiedenis van items binnen (standaard alles) en wat er vanaf dan ge`next()` wordt
+
+## Lijst bijwerken
+
+Na een POST je lijst van data bijwerken:
+
+1. na adden alles opnieuw ophalen
+   - nadeel: maximaal je server aan het belasten
+   - nadeel: traaaaagst
+   - voordeel: makkelijk - meestal .getAll()
+   - voordeel: meest in sync met server
+
+2. object meteen handmatig aan lijst toevoegen
+   - nadeel: je weet niet of dat adden goed gaat - communicatie
+   - nadeel: minst in sync met server - id
+   - voordeel: SNEL MAKKELIJK
+
+3. POST-response de bijgewerkte entiteit handmatig aan lijst toevoegen
+   - voordeel: classy
+   - voordeel: adden gaat goed
+   - nadeel: minder in sync met server 
+   - nadeel: minder snel
+   - alternatief: POST-response de hele lijst teruggeeft - trager. minder conform REST
+
+spinner: mogen slimmer++ worden. Na 5 sec. geen resultaat? Na 15 sec. geen resultaat? "Goh dat duurt lang he?" richting gebruiker.
+
+## Change detection
+
+ALLE databindingexpressies op de pagina af.
+
+{{bla}}
+[disabled]="..."
+@for
+@if
+
+// wat Angular doet => zone.js
+
+let originalTimeout = window.setTimeout;
+
+window.setTimeout = (callback, ms) => {
+	originalTimeout(() => {
+		callback(); // waar wij data mogelijk aanpassen
+		runChangeDetection();
+	}, ms);
+};
+
+undefined = 'hoi';
+
+waarom zone.js weg:
+- minder magie
+- meer controle
+- performance
+
+
+
+
+wanneer OnPush-componenten wel worden gerenderd:
+- bij markForCheck()
+- als event in component zelf optreedt
+- als inputparameter veranderd (oldVal === newVal, let op met arrays/objects)
+- signals
+
+
+
+## UI testing / end-to-end testing
+- verschil? backend mocken of niet.
+
+Tools:
+- Cypress
+  - Cypress Inc.
+  - Cypress Dashboard/Cloud
+  - architectuur  alle commando's klaarzetten/batchen
+  - API  Promise   interactie  cy.get('bla').should('have.text', 'bla');
+    TypeScript  .d.ts
+- Playwright
+  - Microsoft
+  - volop TypeScript
+  - browser support
+  - chique API
+- Selenium (20+ jaar oud)
+- Testcafe
+- WebdriverIO
+
 ## Angular's migratie
 
 Oud Angular vs new Angular.
