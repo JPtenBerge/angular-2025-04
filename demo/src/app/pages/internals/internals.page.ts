@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
-import { CarViewerComponent } from "../../components/car-viewer/car-viewer.component";
+import { CarViewerComponent } from '../../components/car-viewer/car-viewer.component';
 
 @Component({
-	selector: 'app-internals',
 	imports: [CarViewerComponent],
 	templateUrl: './internals.page.html',
 })
