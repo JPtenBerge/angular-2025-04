@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { createFramework, Framework } from '../../entities/framework';
 import { JsonPipe } from '@angular/common';
 import {
@@ -12,6 +12,7 @@ import {
 	Validators,
 } from '@angular/forms';
 import { FrameworkDal } from '../../dal/framework.dal';
+import { filter } from 'rxjs';
 
 const myValidator = (c: AbstractControl) => {
 	return null;
@@ -36,6 +37,7 @@ const myBiggerValidator = (form: AbstractControl) => {
 export class AndereFrameworksPage {
 	fb = inject(NonNullableFormBuilder);
 	frameworkDal = inject(FrameworkDal);
+	cdr = inject(ChangeDetectorRef);
 
 	addFrameworkForm2 = this.fb.group(
 		{
@@ -69,16 +71,16 @@ export class AndereFrameworksPage {
 	frameworks?: Framework[];
 
 	ngOnInit() {
-		// this.addFrameworkForm.reset();
-		// this.addFrameworkForm.valueChanges.subs
-
-		this.frameworkDal.getAll().subscribe(frameworks => {
-			console.log('in subscribe:', frameworks);
+		let frameworkGetAll = this.frameworkDal.getAll();
+		frameworkGetAll.pipe(filter(x => x !== null)).subscribe(frameworks => {
 			this.frameworks = frameworks;
+			this.cdr.markForCheck(); // because Zone.js is stripped away now
 		});
 	}
 
 	addFramework() {
-		this.frameworkDal.add(this.addFrameworkForm2.getRawValue());
+		this.frameworkDal.add(this.addFrameworkForm2.getRawValue()).subscribe(() => {
+			this.cdr.markForCheck();
+		});
 	}
 }
